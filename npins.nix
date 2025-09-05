@@ -12,6 +12,9 @@ in {
   };
 
   devShells.default = pkgs.mkShell {
+    shellHook = ''
+      export KURU_TODO=$(pwd)/todo.dat
+    '';
     inputsFrom = map (getAttr "env") [self.packages.default];
     packages = attrValues {
       inherit (pkgs) haskell-language-server fourmolu;
