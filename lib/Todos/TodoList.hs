@@ -40,12 +40,13 @@ removeTodoEntry idx list
 readTodo :: String -> Maybe TodoList
 readTodo = readMaybe
 
+-- despite the name it actually toggles the completion status
 completeTodoEntry :: Int -> TodoList -> TodoList
 completeTodoEntry idx list
   | idx <= 0 = list
   | otherwise = aux list
  where
   aux [] = []
-  aux (x@(idx', TodoEntry _ tsk) : xs)
-    | idx == idx' = (idx', TodoEntry True tsk) : aux xs
+  aux (x@(idx', TodoEntry dn tsk) : xs)
+    | idx == idx' = (idx', TodoEntry (not dn) tsk) : aux xs
     | otherwise = x : aux xs
