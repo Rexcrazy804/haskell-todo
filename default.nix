@@ -7,9 +7,7 @@ pkgs.lib.fix (self: let
   inherit (pkgs.lib) attrValues;
 in {
   packages = {
-    todo = haskellPackages.developPackage {
-      root = ./.;
-    };
+    todo = pkgs.callPackage ./package.nix {};
     default = self.packages.todo;
   };
 
