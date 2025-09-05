@@ -23,6 +23,7 @@ getTodoFile = do
 getTodoList :: IO TodoList
 getTodoList = do
   todoFile <- getTodoFile
+  withFile todoFile AppendMode (\_ -> return ())
   todoData <- withFile todoFile ReadMode hGetContents'
   return (fromMaybe newTodoList $ readTodo todoData)
 
