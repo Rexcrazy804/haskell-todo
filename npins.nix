@@ -4,7 +4,7 @@
 }:
 pkgs.lib.fix (self: let
   inherit (pkgs) haskellPackages;
-  inherit (pkgs.lib) attrValues;
+  inherit (pkgs.lib) attrValues map getAttr;
 in {
   packages = {
     todo = pkgs.callPackage ./default.nix {};
@@ -12,7 +12,7 @@ in {
   };
 
   devShells.default = pkgs.mkShell {
-    inputsFrom = [self.packages.default];
+    inputsFrom = map (getAttr "env") [self.packages.default];
     packages = attrValues {
       inherit (pkgs) haskell-language-server fourmolu;
       inherit (haskellPackages) cabal-fmt cabal-install;
