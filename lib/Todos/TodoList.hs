@@ -6,6 +6,7 @@ module Todos.TodoList (
   removeTodoEntry,
   readTodo,
   newEntry,
+  completeTodoEntry,
 ) where
 
 import Text.Read (readMaybe)
@@ -31,10 +32,20 @@ removeTodoEntry idx list
   | otherwise = aux list
  where
   aux [] = []
-  aux (x@(idx', tsk) : xs)
+  aux (x@(idx', entry) : xs)
     | idx == idx' = aux xs
-    | idx' > idx = (idx' - 1, tsk) : aux xs
+    | idx' > idx = (idx' - 1, entry) : aux xs
     | otherwise = x : aux xs
 
 readTodo :: String -> Maybe TodoList
 readTodo = readMaybe
+
+completeTodoEntry :: Int -> TodoList -> TodoList
+completeTodoEntry idx list
+  | idx <= 0 = list
+  | otherwise = aux list
+ where
+  aux [] = []
+  aux (x@(idx', TodoEntry _ tsk) : xs)
+    | idx == idx' = (idx', TodoEntry True tsk) : aux xs
+    | otherwise = x : aux xs
