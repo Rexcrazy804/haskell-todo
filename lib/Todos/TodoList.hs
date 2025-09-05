@@ -1,6 +1,6 @@
 module Todos.TodoList (
   TodoList,
-  TodoEntry,
+  TodoEntry (TodoEntry),
   newTodoList,
   insertTodoEntry,
   removeTodoEntry,

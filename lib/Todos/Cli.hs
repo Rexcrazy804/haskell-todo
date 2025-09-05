@@ -2,6 +2,7 @@ module Todos.Cli (
   getTodoFile,
   getTodoList,
   writeTodoList,
+  showTodoList,
 ) where
 
 import Data.Maybe (fromMaybe)
@@ -26,6 +27,14 @@ getTodoList = do
   withFile todoFile AppendMode (\_ -> return ())
   todoData <- withFile todoFile ReadMode hGetContents'
   return (fromMaybe newTodoList $ readTodo todoData)
+
+showTodoList :: Maybe TodoList -> IO ()
+showTodoList list' = do
+  todoList <- maybe getTodoList return list'
+  mapM_ displayEntry $ reverse todoList
+ where
+  displayEntry (idx, TodoEntry dn task) =
+    putStrLn $ concat [show idx, "|[", if dn then "X" else " ", "]: ", task]
 
 writeTodoList :: (Show a) => a -> IO ()
 writeTodoList list = do
