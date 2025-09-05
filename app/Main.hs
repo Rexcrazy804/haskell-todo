@@ -1,11 +1,8 @@
 module Main where
 
-import Data.Maybe (fromMaybe)
 import System.Environment (getArgs)
-import System.IO
-import Todos.Cli (getTodoFile)
-import Todos.TodoList (newTodoList)
-import qualified Todos.TodoList as TD
+import Todos.Cli
+import Todos.TodoList
 
 subcommands :: [(String, [String] -> IO ())]
 subcommands =
@@ -24,15 +21,11 @@ getSubCommand :: [String] -> (String, [String])
 getSubCommand [] = ("help", [])
 getSubCommand (subcommand : args) = (subcommand, args)
 
-getTodoList :: IO TD.TodoList
-getTodoList = do
-  todoFile <- getTodoFile
-  todoData <- withFile todoFile ReadMode hGetContents'
-  return (fromMaybe newTodoList $ TD.readTodo todoData)
-
 addEntry :: [String] -> IO ()
-addEntry args = do
-  putStrLn (concat args)
+addEntry [] = putStrLn "Error: Task Description Required"
+addEntry (task : _) = do
+  todoList <- getTodoList
+  writeTodoList $ insertTodoEntry (newEntry task) todoList
   return ()
 
 removeEntry :: [String] -> IO ()
