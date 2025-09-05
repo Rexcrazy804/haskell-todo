@@ -25,9 +25,9 @@ getSubCommand (subcommand : args) = (subcommand, args)
 
 addEntry :: [String] -> IO ()
 addEntry [] = putStrLn "Error: Task Description Required"
-addEntry (task : _) = do
+addEntry tasks = do
   todoList <- getTodoList
-  writeTodoList $ insertTodoEntry (newEntry task) todoList
+  writeTodoList $ foldr (insertTodoEntry . newEntry) todoList tasks
   return ()
 
 showEntries :: [String] -> IO ()
@@ -35,14 +35,14 @@ showEntries _args = showTodoList Nothing
 
 removeEntry :: [String] -> IO ()
 removeEntry [] = putStrLn "Entry Index Required"
-removeEntry (idx : _) = do
+removeEntry idxs = do
   todoList <- getTodoList
-  writeTodoList $ removeTodoEntry (read idx) todoList
+  writeTodoList $ foldr (removeTodoEntry . read) todoList idxs
   return ()
 
 completeEntry :: [String] -> IO ()
 completeEntry [] = putStrLn "Entry Index requred"
-completeEntry (idx : _) = do
+completeEntry idxs = do
   todoList <- getTodoList
-  writeTodoList $ completeTodoEntry (read idx) todoList
+  writeTodoList $ foldr (completeTodoEntry . read) todoList idxs
   return ()
