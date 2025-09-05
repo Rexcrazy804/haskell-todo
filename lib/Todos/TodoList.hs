@@ -5,6 +5,7 @@ module Todos.TodoList (
   insertTodoEntry,
   removeTodoEntry,
   readTodo,
+  newEntry,
 ) where
 
 type TodoList = [(Int, TodoEntry)]
@@ -14,6 +15,9 @@ data TodoEntry = TodoEntry
 
 newTodoList :: TodoList
 newTodoList = []
+
+newEntry :: String -> TodoEntry
+newEntry = TodoEntry False
 
 insertTodoEntry :: TodoEntry -> TodoList -> TodoList
 insertTodoEntry entry xl@((idx, _) : _) = (idx + 1, entry) : xl
