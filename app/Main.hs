@@ -28,7 +28,7 @@ addEntry :: [String] -> IO ()
 addEntry [] = putStrLn "Error: Task Description Required"
 addEntry tasks = do
   todoList <- getTodoList
-  writeTodoList $ foldr (insertTodoEntry . newEntry) todoList tasks
+  writeTodoList $ foldr (insertTodoEntry . newEntry) todoList (reverse tasks)
   return ()
 
 showEntries :: [String] -> IO ()
