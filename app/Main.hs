@@ -8,6 +8,7 @@ subcommands :: [(String, [String] -> IO ())]
 subcommands =
   [ ("add", addEntry)
   , ("remove", removeEntry)
+  , ("show", showEntries)
   ]
 
 main :: IO ()
@@ -27,6 +28,9 @@ addEntry (task : _) = do
   todoList <- getTodoList
   writeTodoList $ insertTodoEntry (newEntry task) todoList
   return ()
+
+showEntries :: [String] -> IO ()
+showEntries _args = showTodoList Nothing
 
 removeEntry :: [String] -> IO ()
 removeEntry args = do
