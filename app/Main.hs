@@ -9,6 +9,7 @@ subcommands =
   [ ("add", addEntry)
   , ("remove", removeEntry)
   , ("show", showEntries)
+  , ("done", completeEntry)
   ]
 
 main :: IO ()
@@ -40,6 +41,8 @@ removeEntry (idx : _) = do
   return ()
 
 completeEntry :: [String] -> IO ()
-completeEntry args = do
-  putStrLn (concat args)
+completeEntry [] = putStrLn "Entry Index requred"
+completeEntry (idx : _) = do
+  todoList <- getTodoList
+  writeTodoList $ completeTodoEntry (read idx) todoList
   return ()
