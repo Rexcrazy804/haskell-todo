@@ -1,21 +1,20 @@
 {
-  pins ? import ./npins,
-  pkgs ? import pins.nixpkgs {},
-}:
-pkgs.lib.fix (self: let
-  inherit (pkgs) haskellPackages;
-  inherit (pkgs.lib) attrValues;
-in {
-  packages = {
-    todo = pkgs.callPackage ./package.nix {};
-    default = self.packages.todo;
-  };
+  haskellPackages,
+  lib,
+}: let
+  inherit (lib.fileset) toSource unions fileFilter;
+  root = ./.;
 
-  devShells.default = pkgs.mkShell {
-    inputsFrom = [self.packages.default];
-    packages = attrValues {
-      inherit (pkgs) haskell-language-server fourmolu;
-      inherit (haskellPackages) cabal-fmt cabal-install;
+  haskellFileFilter = fileFilter (file: builtins.any file.hasExt ["hs"]);
+in
+  haskellPackages.developPackage {
+    root = toSource {
+      inherit root;
+      fileset = unions [
+        (haskellFileFilter (root + /app))
+        (haskellFileFilter (root + /lib))
+        (haskellFileFilter (root + /test))
+        (root + /todo.cabal)
+      ];
     };
-  };
-})
+  }
