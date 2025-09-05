@@ -1,6 +1,7 @@
 module Todos.Cli (
   getTodoFile,
   getTodoList,
+  writeTodoList,
 ) where
 
 import Data.Maybe (fromMaybe)
@@ -24,3 +25,8 @@ getTodoList = do
   todoFile <- getTodoFile
   todoData <- withFile todoFile ReadMode hGetContents'
   return (fromMaybe newTodoList $ readTodo todoData)
+
+writeTodoList :: (Show a) => a -> IO ()
+writeTodoList list = do
+  todoFile <- getTodoFile
+  withFile todoFile WriteMode (`hPutStr` show list)
