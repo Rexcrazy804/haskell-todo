@@ -33,8 +33,10 @@ showEntries :: [String] -> IO ()
 showEntries _args = showTodoList Nothing
 
 removeEntry :: [String] -> IO ()
-removeEntry args = do
-  putStrLn (concat args)
+removeEntry [] = putStrLn "Entry Index Required"
+removeEntry (idx : _) = do
+  todoList <- getTodoList
+  writeTodoList $ removeTodoEntry (read idx) todoList
   return ()
 
 completeEntry :: [String] -> IO ()
