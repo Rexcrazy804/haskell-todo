@@ -1,5 +1,6 @@
 module Todos.Cli (
   getTodoFile,
+  getTodoList,
 ) where
 
 import Data.Maybe (fromMaybe)
@@ -7,6 +8,8 @@ import System.Directory (createDirectoryIfMissing)
 import System.Environment (getEnvironment)
 import System.Environment.XDG.BaseDir (getUserConfigDir)
 import System.FilePath ((</>))
+import System.IO
+import Todos.TodoList
 
 getTodoFile :: IO FilePath
 getTodoFile = do
@@ -15,3 +18,9 @@ getTodoFile = do
   configFile <- fromMaybe defaultConfig . lookup "KURU_TODO" <$> getEnvironment
   createDirectoryIfMissing True configFile
   return configFile
+
+getTodoList :: IO TodoList
+getTodoList = do
+  todoFile <- getTodoFile
+  todoData <- withFile todoFile ReadMode hGetContents'
+  return (fromMaybe newTodoList $ readTodo todoData)
