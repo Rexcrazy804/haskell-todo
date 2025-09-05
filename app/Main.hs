@@ -17,7 +17,7 @@ main = do
   (subcommand, args) <- getSubCommand <$> getArgs
   case lookup subcommand subcommands of
     Just func -> func args
-    Nothing -> putStrLn "Invalid Subcommand"
+    Nothing -> putStrLn "Error: Invalid Subcommand"
 
 getSubCommand :: [String] -> (String, [String])
 getSubCommand [] = ("help", [])
@@ -34,14 +34,14 @@ showEntries :: [String] -> IO ()
 showEntries _args = showTodoList Nothing
 
 removeEntry :: [String] -> IO ()
-removeEntry [] = putStrLn "Entry Index Required"
+removeEntry [] = putStrLn "Error: Entry Index Required"
 removeEntry idxs = do
   todoList <- getTodoList
   writeTodoList $ foldr (removeTodoEntry . read) todoList idxs
   return ()
 
 completeEntry :: [String] -> IO ()
-completeEntry [] = putStrLn "Entry Index requred"
+completeEntry [] = putStrLn "Error: Entry Index requred"
 completeEntry idxs = do
   todoList <- getTodoList
   writeTodoList $ foldr (completeTodoEntry . read) todoList idxs
