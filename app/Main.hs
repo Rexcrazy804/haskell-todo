@@ -10,6 +10,7 @@ subcommands =
   , ("remove", removeEntry)
   , ("show", showEntries)
   , ("done", completeEntry)
+  , ("clear", clearEntries)
   ]
 
 main :: IO ()
@@ -32,6 +33,9 @@ addEntry tasks = do
 
 showEntries :: [String] -> IO ()
 showEntries _args = showTodoList Nothing
+
+clearEntries :: [String] -> IO ()
+clearEntries _ = writeTodoList newTodoList
 
 removeEntry :: [String] -> IO ()
 removeEntry [] = putStrLn "Error: Entry Index Required"
