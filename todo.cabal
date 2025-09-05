@@ -1,0 +1,64 @@
+cabal-version:   3.0
+name:            todo
+version:         0.1.0.0
+synopsis:        A simple todo cmdline app
+
+-- description:
+homepage:        https://github.com/Rexcrazy804
+license:         Unlicense
+license-file:    LICENSE
+author:          Rexiel Scarlet
+maintainer:      37258415+Rexcrazy804@users.noreply.github.com
+
+-- copyright:
+category:        Data
+build-type:      Simple
+extra-doc-files: CHANGELOG.md
+
+-- extra-source-files:
+
+common warnings
+  ghc-options: -Wall
+
+library
+  import:           warnings
+  exposed-modules:
+    Todos.Cli
+    Todos.TodoList
+
+  -- other-modules:
+  -- other-extensions:
+  build-depends:
+    , base         ^>=4.19.2.0
+    , directory    ^>=1.3.8.5
+    , filepath     ^>=1.4.301.0
+    , xdg-basedir  ^>=0.2.2
+
+  hs-source-dirs:   lib
+  default-language: Haskell2010
+
+executable todo
+  import:           warnings
+  main-is:          Main.hs
+
+  -- other-modules:
+  -- other-extensions:
+  build-depends:
+    , base  ^>=4.19.2.0
+    , todo
+
+  hs-source-dirs:   app
+  default-language: Haskell2010
+
+test-suite todo-test
+  import:           warnings
+  default-language: Haskell2010
+
+  -- other-modules:
+  -- other-extensions:
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   test
+  main-is:          Main.hs
+  build-depends:
+    , base  ^>=4.19.2.0
+    , todo
