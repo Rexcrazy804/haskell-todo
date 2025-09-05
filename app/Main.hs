@@ -1,6 +1,7 @@
 module Main where
 
-import System.Environment (getArgs)
+import Data.Maybe (isJust)
+import System.Environment (getArgs, getEnvironment)
 import Todos.Cli
 import Todos.TodoList
 
@@ -27,8 +28,12 @@ getSubCommand (subcommand : args) = (subcommand, args)
 addEntry :: [String] -> IO ()
 addEntry [] = putStrLn "Error: Task Description Required"
 addEntry tasks = do
+  concatEntries <- lookup "KURU_TODO_CONCAT" <$> getEnvironment
   todoList <- getTodoList
-  writeTodoList $ foldr (insertTodoEntry . newEntry) todoList (reverse tasks)
+  writeTodoList $
+    if isJust concatEntries
+      then (`insertTodoEntry` todoList) . newEntry $ unwords tasks
+      else foldr (insertTodoEntry . newEntry) todoList (reverse tasks)
   return ()
 
 showEntries :: [String] -> IO ()
