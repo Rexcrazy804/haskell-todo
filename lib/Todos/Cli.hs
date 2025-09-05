@@ -8,6 +8,7 @@ import System.Environment (getEnvironment)
 import System.Environment.XDG.BaseDir (getUserConfigDir)
 import System.FilePath ((</>))
 
+getTodoFile :: IO FilePath
 getTodoFile = do
   defaultTodoDir <- getUserConfigDir "todo"
   let defaultConfig = defaultTodoDir </> "todolist.dat"
