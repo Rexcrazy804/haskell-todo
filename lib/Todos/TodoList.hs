@@ -8,6 +8,8 @@ module Todos.TodoList (
   newEntry,
 ) where
 
+import Text.Read (readMaybe)
+
 type TodoList = [(Int, TodoEntry)]
 data TodoEntry = TodoEntry
   {done :: Bool, task :: String}
@@ -32,4 +34,4 @@ removeTodoEntry idx = aux
     | otherwise = x : aux xs
 
 readTodo :: String -> Maybe TodoList
-readTodo str = read str :: Maybe TodoList
+readTodo = readMaybe
