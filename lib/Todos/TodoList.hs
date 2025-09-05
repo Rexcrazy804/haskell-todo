@@ -26,11 +26,14 @@ insertTodoEntry entry xl@((idx, _) : _) = (idx + 1, entry) : xl
 insertTodoEntry entry [] = [(1, entry)]
 
 removeTodoEntry :: Int -> TodoList -> TodoList
-removeTodoEntry idx = aux
+removeTodoEntry idx list
+  | idx <= 0 = list
+  | otherwise = aux list
  where
   aux [] = []
-  aux (x@(idx', _) : xs)
+  aux (x@(idx', tsk) : xs)
     | idx == idx' = aux xs
+    | idx' > idx = (idx' - 1, tsk) : aux xs
     | otherwise = x : aux xs
 
 readTodo :: String -> Maybe TodoList
