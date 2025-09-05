@@ -8,7 +8,7 @@ import Data.Maybe (fromMaybe)
 import System.Directory (createDirectoryIfMissing)
 import System.Environment (getEnvironment)
 import System.Environment.XDG.BaseDir (getUserConfigDir)
-import System.FilePath ((</>))
+import System.FilePath (takeDirectory, (</>))
 import System.IO
 import Todos.TodoList
 
@@ -17,7 +17,7 @@ getTodoFile = do
   defaultTodoDir <- getUserConfigDir "todo"
   let defaultConfig = defaultTodoDir </> "todolist.dat"
   configFile <- fromMaybe defaultConfig . lookup "KURU_TODO" <$> getEnvironment
-  createDirectoryIfMissing True configFile
+  createDirectoryIfMissing True (takeDirectory configFile)
   return configFile
 
 getTodoList :: IO TodoList
