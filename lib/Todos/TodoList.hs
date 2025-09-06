@@ -56,4 +56,8 @@ completeTodoEntry idx list
 sortTodoList :: TodoList -> TodoList
 sortTodoList list =
   let (completed, incomplete) = partition (done . snd) list
-   in completed ++ incomplete
+   in reverse . reIndex 1 $ incomplete ++ completed
+ where
+  reIndex :: Int -> TodoList -> TodoList
+  reIndex _ [] = []
+  reIndex idx ((_, x) : xs) = (idx, x) : reIndex (idx + 1) xs
