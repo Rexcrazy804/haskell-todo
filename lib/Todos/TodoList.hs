@@ -7,8 +7,10 @@ module Todos.TodoList (
   readTodo,
   newEntry,
   completeTodoEntry,
+  sortTodoList,
 ) where
 
+import Data.List (partition)
 import Text.Read (readMaybe)
 
 type TodoList = [(Int, TodoEntry)]
@@ -50,3 +52,8 @@ completeTodoEntry idx list
   aux (x@(idx', TodoEntry dn tsk) : xs)
     | idx == idx' = (idx', TodoEntry (not dn) tsk) : aux xs
     | otherwise = x : aux xs
+
+sortTodoList :: TodoList -> TodoList
+sortTodoList list =
+  let (completed, incomplete) = partition (done . snd) list
+   in completed ++ incomplete
