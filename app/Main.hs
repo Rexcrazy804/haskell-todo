@@ -30,7 +30,7 @@ addEntry [] = putStrLn "Error: Task Description Required"
 addEntry tasks = do
   concatEntries <- lookup "KURU_TODO_CONCAT" <$> getEnvironment
   todoList <- getTodoList
-  writeTodoList $
+  writeTodoList . sortTodoList $
     if isJust concatEntries
       then (`insertTodoEntry` todoList) . newEntry $ unwords tasks
       else foldr (insertTodoEntry . newEntry) todoList (reverse tasks)
