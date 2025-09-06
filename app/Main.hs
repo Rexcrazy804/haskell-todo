@@ -53,5 +53,5 @@ completeEntry :: [String] -> IO ()
 completeEntry [] = putStrLn "Error: Entry Index requred"
 completeEntry idxs = do
   todoList <- getTodoList
-  writeTodoList $ foldr (completeTodoEntry . read) todoList idxs
+  writeTodoList $ sortTodoList $ foldr (completeTodoEntry . read) todoList idxs
   return ()
