@@ -15,7 +15,9 @@ import Text.Read (readMaybe)
 
 type TodoList = [(Int, TodoEntry)]
 data TodoEntry = TodoEntry
-  {done :: Bool, task :: String}
+  { isCompleted :: Bool
+  , getTask :: String
+  }
   deriving (Show, Read)
 
 newTodoList :: TodoList
@@ -55,7 +57,7 @@ completeTodoEntry idx list
 
 sortTodoList :: TodoList -> TodoList
 sortTodoList list =
-  let (completed, incomplete) = partition (done . snd) list
+  let (completed, incomplete) = partition (isCompleted . snd) list
    in reverse . reIndex 1 $ incomplete ++ completed
  where
   reIndex :: Int -> TodoList -> TodoList
