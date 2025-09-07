@@ -23,6 +23,18 @@ data TodoEntry = TodoEntry
 newTodoList :: TodoList
 newTodoList = []
 
+intoTodoList :: String -> Maybe TodoList
+intoTodoList = readMaybe
+
+sortTodoList :: TodoList -> TodoList
+sortTodoList list =
+  let (completed, incomplete) = partition (isCompleted . snd) list
+   in reverse . reIndex 1 $ incomplete ++ completed
+ where
+  reIndex :: Int -> TodoList -> TodoList
+  reIndex _ [] = []
+  reIndex idx ((_, x) : xs) = (idx, x) : reIndex (idx + 1) xs
+
 newEntry :: String -> TodoEntry
 newEntry = TodoEntry False
 
@@ -41,9 +53,6 @@ removeTodoEntry idx list
     | idx' > idx = (idx' - 1, entry) : aux xs
     | otherwise = x : aux xs
 
-intoTodoList :: String -> Maybe TodoList
-intoTodoList = readMaybe
-
 -- despite the name it actually toggles the completion status
 completeTodoEntry :: Int -> TodoList -> TodoList
 completeTodoEntry idx list
@@ -54,12 +63,3 @@ completeTodoEntry idx list
   aux (x@(idx', TodoEntry dn tsk) : xs)
     | idx == idx' = (idx', TodoEntry (not dn) tsk) : aux xs
     | otherwise = x : aux xs
-
-sortTodoList :: TodoList -> TodoList
-sortTodoList list =
-  let (completed, incomplete) = partition (isCompleted . snd) list
-   in reverse . reIndex 1 $ incomplete ++ completed
- where
-  reIndex :: Int -> TodoList -> TodoList
-  reIndex _ [] = []
-  reIndex idx ((_, x) : xs) = (idx, x) : reIndex (idx + 1) xs
