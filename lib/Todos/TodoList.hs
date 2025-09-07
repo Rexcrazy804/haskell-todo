@@ -4,7 +4,7 @@ module Todos.TodoList (
   newTodoList,
   insertTodoEntry,
   removeTodoEntry,
-  readTodo,
+  intoTodoList,
   newEntry,
   completeTodoEntry,
   sortTodoList,
@@ -41,8 +41,8 @@ removeTodoEntry idx list
     | idx' > idx = (idx' - 1, entry) : aux xs
     | otherwise = x : aux xs
 
-readTodo :: String -> Maybe TodoList
-readTodo = readMaybe
+intoTodoList :: String -> Maybe TodoList
+intoTodoList = readMaybe
 
 -- despite the name it actually toggles the completion status
 completeTodoEntry :: Int -> TodoList -> TodoList
