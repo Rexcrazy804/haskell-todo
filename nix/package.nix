@@ -3,7 +3,7 @@
   lib,
 }: let
   inherit (lib.fileset) toSource unions fileFilter;
-  root = ./.;
+  root = ../.;
 
   haskellFileFilter = fileFilter (file: builtins.any file.hasExt ["hs"]);
   src = toSource {
