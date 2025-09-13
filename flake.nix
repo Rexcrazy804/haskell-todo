@@ -4,20 +4,22 @@
   inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   inputs.systems.url = "github:nix-systems/default";
 
-  outputs = inputs: let
-    inherit (inputs) self nixpkgs;
-    inherit (nixpkgs.lib) genAttrs;
+  outputs = {
+    self,
+    nixpkgs,
+    systems,
+  }: let
+    inherit (nixpkgs.lib) getAttrs mapAttrs;
 
-    systems = import inputs.systems;
-    pkgsFor = system: inputs.nixpkgs.legacyPackages.${system};
-    eachSystem = fn: genAttrs systems (system: fn (pkgsFor system));
+    pkgsFor = getAttrs (import systems) nixpkgs.legacyPackages;
+    eachSystem = fn: mapAttrs fn pkgsFor;
   in {
-    packages = eachSystem (pkgs: {
+    packages = eachSystem (system: pkgs: {
       todo = pkgs.haskellPackages.callPackage ./nix/package.nix {};
-      default = self.packages.${pkgs.system}.todo;
+      default = self.packages.${system}.todo;
     });
 
-    devShells = eachSystem (pkgs: {
+    devShells = eachSystem (_: pkgs: {
       default = pkgs.callPackage ./nix/shell.nix {inherit self;};
     });
   };
