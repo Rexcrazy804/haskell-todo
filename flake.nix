@@ -1,8 +1,6 @@
 {
   description = "A flake for haskell";
 
-  nixConfig.allow-import-from-derivation = true;
-
   inputs.nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   inputs.systems.url = "github:nix-systems/default";
 
@@ -15,7 +13,8 @@
     eachSystem = fn: genAttrs systems (system: fn (pkgsFor system));
   in {
     packages = eachSystem (pkgs: {
-      default = pkgs.callPackage ./nix/package.nix {};
+      todo = pkgs.haskellPackages.callPackage ./nix/package.nix {};
+      default = self.packages.${pkgs.system}.todo;
     });
 
     devShells = eachSystem (pkgs: {
