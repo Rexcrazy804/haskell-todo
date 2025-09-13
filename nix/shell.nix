@@ -2,7 +2,6 @@
   self,
   lib,
   mkShellNoCC,
-  pkgs,
   system,
   haskellPackages,
   haskell-language-server,
